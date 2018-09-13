@@ -26,6 +26,7 @@ import com.example.android.alarmapp.database.DBOperations;
 import com.example.android.alarmapp.service.AlarmService;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity implements DateFragment.OnDatePickListener, TimeFragment.OnTimePickListener {
 
@@ -80,13 +81,15 @@ public class MainActivity extends AppCompatActivity implements DateFragment.OnDa
                 .setTitle("Add Alarm")
                 .setCancelable(false)
                 .setView(dialogLayout)
+                .setPositiveButton("Add", null)
+                .setNegativeButton("Cancel", null)
                 .create();
 
         dialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialogInterface) {
 
-                Button positiveButton = dialogLayout.findViewById(R.id.ok_dialog_button);
+                Button positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
                 positiveButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -95,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements DateFragment.OnDa
                     }
                 });
 
-                Button negativeButton = dialogLayout.findViewById(R.id.cancel_dialog_button);
+                Button negativeButton = dialog.getButton(AlertDialog.BUTTON_NEGATIVE);
                 negativeButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
