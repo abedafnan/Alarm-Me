@@ -26,6 +26,7 @@ import com.example.android.alarmapp.database.DBOperations;
 import com.example.android.alarmapp.service.AlarmService;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 public class MainActivity extends AppCompatActivity implements DateFragment.OnDatePickListener, TimeFragment.OnTimePickListener {
@@ -36,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements DateFragment.OnDa
     private RecyclerAdapter mAdapter;
     private ArrayList<Alarm> mAlarms;
     private DBOperations operations;
+    private Calendar calendar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +45,8 @@ public class MainActivity extends AppCompatActivity implements DateFragment.OnDa
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        calendar = Calendar.getInstance();
 
         layoutRoot = findViewById(R.id.dialog_layout);
         mRecyclerView = findViewById(R.id.recycler_view);
@@ -112,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements DateFragment.OnDa
     }
 
     public void addNewAlarm() {
-        Alarm alarm = new Alarm(System.currentTimeMillis() + 1000*60, 1);
+        Alarm alarm = new Alarm(calendar.getTimeInMillis(), 1);
         long rowId = operations.addAlarm(alarm);
 
         if (rowId > 0) {
@@ -175,12 +179,19 @@ public class MainActivity extends AppCompatActivity implements DateFragment.OnDa
     public void onTimeSelected(int hour, int minute) {
         TextView timeTextView = dialogLayout.findViewById(R.id.time_text_view);
         timeTextView.setText(hour + " : " + minute);
+
+        calendar.set(Calendar.HOUR_OF_DAY, hour);
+        calendar.set(Calendar.MINUTE, minute);
     }
 
     @Override
     public void onDateSelected(int day, int month, int year) {
         TextView dateTextView = dialogLayout.findViewById(R.id.date_text_view);
         dateTextView.setText(day + "/" + month + "/" + year);
+
+        calendar.set(Calendar.DAY_OF_MONTH, day);
+        calendar.set(Calendar.MONTH, month);
+        calendar.set(Calendar.YEAR, year);
     }
 
     private void setAlarm(int position) { // position taken from the switch
