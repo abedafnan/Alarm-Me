@@ -4,6 +4,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
+
 import com.example.android.alarmapp.Alarm;
 
 import java.util.ArrayList;
@@ -48,7 +50,7 @@ public class DBOperations {
         Cursor cursor = database.query(DBHelper.TABLE_NAME, null,
                 null, null, null, null, null);
 
-        if (cursor.moveToNext()) {
+        while (cursor.moveToNext()) {
             long alarmTime = cursor.getLong(cursor.getColumnIndex(DBHelper.COL_TIME));
             int alarmIsEnabled = cursor.getInt(cursor.getColumnIndex(DBHelper.COL_IS_ENABLED));
             long alarmId = cursor.getLong(cursor.getColumnIndex(DBHelper._ID));

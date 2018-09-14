@@ -21,17 +21,6 @@
         android:layout_centerVertical="true"
         android:text="7:00"/>
 
-    <!--<TextView-->
-        <!--android:id="@+id/item_am_pm"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:textAllCaps="true"-->
-        <!--android:textAppearance="?android:attr/textAppearanceSmall"-->
-        <!--android:layout_alignBaseline="@+id/item_time"-->
-        <!--android:layout_toRightOf="@+id/item_time"-->
-        <!--android:layout_toEndOf="@+id/item_time"-->
-        <!--android:text="AM"/>-->
-
      <Switch
          android:id="@+id/item_switch"
          android:layout_width="wrap_content"

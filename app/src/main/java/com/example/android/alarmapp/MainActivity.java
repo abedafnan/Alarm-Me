@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -46,8 +47,6 @@ public class MainActivity extends AppCompatActivity implements DateFragment.OnDa
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        calendar = Calendar.getInstance();
-
         layoutRoot = findViewById(R.id.dialog_layout);
         mRecyclerView = findViewById(R.id.recycler_view);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
@@ -55,7 +54,6 @@ public class MainActivity extends AppCompatActivity implements DateFragment.OnDa
 
         operations = new DBOperations(this);
         mAlarms = operations.readAllAlarms();
-        Toast.makeText(this, "" + mAlarms.size(), Toast.LENGTH_SHORT).show();
 
         // clicking on item will view the delete dialog
         mAdapter = new RecyclerAdapter(mAlarms, new RecyclerAdapter.OnItemClickListener() {
@@ -72,6 +70,7 @@ public class MainActivity extends AppCompatActivity implements DateFragment.OnDa
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                calendar = null;
                 viewAddDialog();
             }
         });
@@ -97,8 +96,12 @@ public class MainActivity extends AppCompatActivity implements DateFragment.OnDa
                 positiveButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        addNewAlarm();
-                        dialog.dismiss();
+                        if (calendar != null) {
+                            addNewAlarm();
+                            dialog.dismiss();
+                        } else {
+                            Toast.makeText(MainActivity.this, "Time not set!", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
 
@@ -180,6 +183,9 @@ public class MainActivity extends AppCompatActivity implements DateFragment.OnDa
         TextView timeTextView = dialogLayout.findViewById(R.id.time_text_view);
         timeTextView.setText(hour + " : " + minute);
 
+        if (calendar == null) {
+            calendar = Calendar.getInstance();
+        }
         calendar.set(Calendar.HOUR_OF_DAY, hour);
         calendar.set(Calendar.MINUTE, minute);
     }
@@ -189,23 +195,28 @@ public class MainActivity extends AppCompatActivity implements DateFragment.OnDa
         TextView dateTextView = dialogLayout.findViewById(R.id.date_text_view);
         dateTextView.setText(day + "/" + month + "/" + year);
 
+        if (calendar == null) {
+            calendar = Calendar.getInstance();
+        }
         calendar.set(Calendar.DAY_OF_MONTH, day);
         calendar.set(Calendar.MONTH, month);
         calendar.set(Calendar.YEAR, year);
     }
 
-    private void setAlarm(int position) { // position taken from the switch
+    private void setAlarm(int position) {
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 
         Intent intent = new Intent(this, AlarmService.class);
         PendingIntent pendingIntent = PendingIntent.getService(this, 0, intent,  0);
 
         alarmManager.set(AlarmManager.RTC_WAKEUP, mAlarms.get(position).getTime(), pendingIntent);
+        Toast.makeText(this, "Alarm set", Toast.LENGTH_SHORT).show();
     }
 
     public void stopAlarm() {
         Intent intent = new Intent(this, AlarmService.class);
         stopService(intent);
+        Toast.makeText(this, "Alarm stopped", Toast.LENGTH_SHORT).show();
     }
 
     @Override

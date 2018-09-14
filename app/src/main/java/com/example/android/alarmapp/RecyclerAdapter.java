@@ -1,5 +1,8 @@
 package com.example.android.alarmapp;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -11,6 +14,8 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.android.alarmapp.service.AlarmService;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -64,6 +69,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         int hours = new Date(mAlarms.get(position).getTime()).getHours();
         int minutes = new Date(mAlarms.get(position).getTime()).getMinutes();
         holder.alarmTextView.setText("" + hours + " : " + minutes); // try formatting the time
+
         holder.alarmSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
