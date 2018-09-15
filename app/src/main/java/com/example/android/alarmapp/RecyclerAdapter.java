@@ -20,7 +20,6 @@ import com.example.android.alarmapp.service.AlarmService;
 import java.util.ArrayList;
 import java.util.Date;
 
-
 /**
  * Created by Afnan A. A. Abed on 9/8/2018.
  */
@@ -29,10 +28,15 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
     private ArrayList<Alarm> mAlarms;
     private OnItemClickListener mListener;
+    private SwitchListener mSwitchListener;
 
     public RecyclerAdapter(ArrayList<Alarm> alarms, OnItemClickListener listener) {
         mAlarms = alarms;
         mListener = listener;
+    }
+
+    public void setSwitchListener(SwitchListener switchListener) {
+        mSwitchListener = switchListener;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -52,7 +56,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, final int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view = inflater.inflate(R.layout.recycler_item, parent, false);
-        final ViewHolder viewHolder =  new ViewHolder(view);
+        final ViewHolder viewHolder = new ViewHolder(view);
 
         view.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,6 +83,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                     mAlarms.get(position).setIsEnabled(0);
                 }
 
+                mSwitchListener.onSwitchChanged(position);
             }
         });
     }
@@ -88,11 +93,17 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         return mAlarms.size();
     }
 
+    // RecyclerView item click listener interface
     public interface OnItemClickListener {
         void onItemClick(View view, int position);
     }
 
-    public void addAlarm(ArrayList<Alarm> alarms){
+    // Alarm switch state change listener interface
+    public interface SwitchListener {
+        void onSwitchChanged(int position);
+    }
+
+    public void addAlarm(ArrayList<Alarm> alarms) {
         mAlarms = alarms;
         notifyDataSetChanged();
     }

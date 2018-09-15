@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-public class MainActivity extends AppCompatActivity implements DateFragment.OnDatePickListener, TimeFragment.OnTimePickListener {
+public class MainActivity extends AppCompatActivity implements DateFragment.OnDatePickListener, TimeFragment.OnTimePickListener, RecyclerAdapter.SwitchListener{
 
     private LinearLayout layoutRoot;
     private View dialogLayout;
@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements DateFragment.OnDa
     private ArrayList<Alarm> mAlarms;
     private DBOperations operations;
     private Calendar calendar;
+    private Switch alarmSwitch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements DateFragment.OnDa
                 viewDeleteDialog(position);
             }
         });
-
+        mAdapter.setSwitchListener(this);
         mRecyclerView.setAdapter(mAdapter);
 
         // clicking on the floating button will view the add dialog
@@ -203,6 +204,17 @@ public class MainActivity extends AppCompatActivity implements DateFragment.OnDa
         calendar.set(Calendar.YEAR, year);
     }
 
+    // Start the alarm if the switch is on and stop it if it's off
+    @Override
+    public void onSwitchChanged(int position) {
+        Log.d("TAG", "Status: " + mAlarms.get(position).isEnabled());
+        if (mAlarms.get(position).isEnabled() == 1) {
+            setAlarm(position);
+        } else if (mAlarms.get(position).isEnabled() == 0) {
+            stopAlarm();
+        }
+    }
+
     private void setAlarm(int position) {
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 
@@ -216,7 +228,7 @@ public class MainActivity extends AppCompatActivity implements DateFragment.OnDa
     public void stopAlarm() {
         Intent intent = new Intent(this, AlarmService.class);
         stopService(intent);
-        Toast.makeText(this, "Alarm stopped", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Alarm cancelled", Toast.LENGTH_SHORT).show();
     }
 
     @Override

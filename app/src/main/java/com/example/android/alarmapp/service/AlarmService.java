@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
@@ -41,8 +42,6 @@ public class AlarmService extends IntentService {
         Log.v("Service", "Service onHandle");
 
         Notification.Builder notification = new Notification.Builder(this);
-//        NotificationChannel channel = new NotificationChannel("channel_id",
-//                "Alarm Notification Channel", NotificationManager.IMPORTANCE_DEFAULT);
         notification.setContentTitle("Alarm Notification");
         notification.setContentText("The time has come");
         notification.setSmallIcon(R.drawable.ic_launcher_background);
@@ -54,9 +53,16 @@ public class AlarmService extends IntentService {
 
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-//        notificationManager.createNotificationChannel(channel);
-        notificationManager.notify(1, notification.build());
 
+        // Make notification channel for versions starting from Oreo
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            String name = "Alarm Notification Channel";
+            NotificationChannel channel = new NotificationChannel("channel_id", name, importance);
+            notificationManager.createNotificationChannel(channel);
+        }
+
+        notificationManager.notify(1, notification.build());
     }
 
     @Override
