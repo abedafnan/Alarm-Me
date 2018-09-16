@@ -26,7 +26,7 @@ public class DateFragment extends DialogFragment implements DatePickerDialog.OnD
         int month = calendar.get(Calendar.MONTH);
         int year = calendar.get(Calendar.YEAR);
 
-        return new DatePickerDialog(getContext(), this, year, month+1, day);
+        return new DatePickerDialog(getContext(), this, year, month, day);
     }
 
     @Override

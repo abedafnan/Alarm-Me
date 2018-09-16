@@ -39,7 +39,6 @@ public class MainActivity extends AppCompatActivity implements DateFragment.OnDa
     private ArrayList<Alarm> mAlarms;
     private DBOperations operations;
     private Calendar calendar;
-    private Switch alarmSwitch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -231,27 +230,23 @@ public class MainActivity extends AppCompatActivity implements DateFragment.OnDa
         Toast.makeText(this, "Alarm cancelled", Toast.LENGTH_SHORT).show();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//        getMenuInflater().inflate(R.menu.menu_main, menu);
+//        return true;
+//    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        int id = item.getItemId();
+//
+//        //noinspection SimplifiableIfStatement
+//        if (id == R.id.action_settings) {
+//            return true;
+//        }
+//
+//        return super.onOptionsItemSelected(item);
+//    }
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-//             to try the alarm service
-//            setAlarm();
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 }
